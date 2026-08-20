@@ -29,11 +29,11 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.subheader("Add")
-    with st.form("add_form", clear_on_submit=True):
+    with st.form("add_form", clear_on_submit=True, border=False):
         add_name = st.text_input("Setting Name").lower()
         add_value = st.text_input("Setting Value").lower()
         
-        if st.form_submit_button("Add Setting"):
+        if st.form_submit_button("Add Setting", use_container_width=True):
             if not add_name or not add_value:
                 st.session_state.notification = ("error", "Both fields are required.")
             elif add_name in st.session_state.user_settings:
@@ -45,11 +45,11 @@ with col1:
 
 with col2:
     st.subheader("Update")
-    with st.form("update_form", clear_on_submit=True):
+    with st.form("update_form", clear_on_submit=True, border=False):
         up_name = st.text_input("Existing Setting Name").lower()
         up_value = st.text_input("New Value").lower()
         
-        if st.form_submit_button("Update Setting"):
+        if st.form_submit_button("Update Setting", use_container_width=True):
             if not up_name or not up_value:
                 st.session_state.notification = ("error", "Both fields are required.")
             elif up_name not in st.session_state.user_settings:
@@ -61,10 +61,10 @@ with col2:
 
 with col3:
     st.subheader("Delete")
-    with st.form("delete_form", clear_on_submit=True):
+    with st.form("delete_form", clear_on_submit=True, border=False):
         del_name = st.text_input("Setting Name to Delete").lower()
         
-        if st.form_submit_button("Delete Setting"):
+        if st.form_submit_button("Delete Setting", use_container_width=True):
             if not del_name:
                 st.session_state.notification = ("error", "Field required.")
             elif del_name not in st.session_state.user_settings:
