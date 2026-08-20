@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.set_page_config(page_title="Settings App")
+
 st.markdown(
     """
     <style>
@@ -11,14 +13,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if 'user_settings' not in st.session_state:
-    st.session_state.user_settings = {'theme': 'dark', 'volume': 'high'}
-if 'notification' not in st.session_state:
+if "user_settings" not in st.session_state:
+    st.session_state.user_settings = {"theme": "dark", "volume": "high"}
+if "notification" not in st.session_state:
     st.session_state.notification = None
 
 st.title("User Settings Manager")
 
-st.info("This is a simple settings dashboard. By default, the app starts with a 'theme' and 'volume' setting. You can add, update, or delete your preferences using the forms below. Any changes you make will instantly update the table.")
+st.info(
+    "This is a simple settings dashboard. By default, the app starts with a 'theme' and 'volume' setting. You can add, update, or delete your preferences using the forms below. Any changes you make will instantly update the table."
+)
 
 if st.session_state.notification:
     msg_type, msg_text = st.session_state.notification
@@ -43,12 +47,15 @@ with col1:
     with st.form("add_form", clear_on_submit=True):
         add_name = st.text_input("Setting Name").lower()
         add_value = st.text_input("Setting Value").lower()
-        
+
         if st.form_submit_button("Add Setting"):
             if not add_name or not add_value:
                 st.session_state.notification = ("error", "Both fields are required.")
             elif add_name in st.session_state.user_settings:
-                st.session_state.notification = ("error", f"'{add_name}' already exists.")
+                st.session_state.notification = (
+                    "error",
+                    f"'{add_name}' already exists.",
+                )
             else:
                 st.session_state.user_settings[add_name] = add_value
                 st.session_state.notification = ("success", "Setting Added!")
@@ -59,7 +66,7 @@ with col2:
     with st.form("update_form", clear_on_submit=True):
         up_name = st.text_input("Existing Setting Name").lower()
         up_value = st.text_input("New Value").lower()
-        
+
         if st.form_submit_button("Update Setting"):
             if not up_name or not up_value:
                 st.session_state.notification = ("error", "Both fields are required.")
@@ -74,7 +81,7 @@ with col3:
     st.subheader("Delete")
     with st.form("delete_form", clear_on_submit=True):
         del_name = st.text_input("Setting Name to Delete").lower()
-        
+
         if st.form_submit_button("Delete Setting"):
             if not del_name:
                 st.session_state.notification = ("error", "Field required.")
