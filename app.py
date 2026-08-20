@@ -2,10 +2,20 @@ import streamlit as st
 
 if 'user_settings' not in st.session_state:
     st.session_state.user_settings = {'theme': 'dark', 'volume': 'high'}
+if 'notification' not in st.session_state:
+    st.session_state.notification = None
 
 st.title("User Settings Manager")
 
-st.info("This is a simple settings dashboard. By default, the app starts with a 'theme' and 'volume' setting. You can add, update, or delete your preferences using the forms below. Any changes you make will instantly update the table.")
+st.info("This dashboard manages your preferences. By default, the app starts with a 'theme' and 'volume' setting. You can use the forms below to add new settings, update existing ones, or delete them. The table below will update instantly to reflect your changes.")
+
+if st.session_state.notification:
+    msg_type, msg_text = st.session_state.notification
+    if msg_type == "success":
+        st.success(msg_text)
+    elif msg_type == "error":
+        st.error(msg_text)
+    st.session_state.notification = None
 
 st.subheader("Current Settings")
 if not st.session_state.user_settings:
@@ -25,13 +35,13 @@ with col1:
         
         if st.form_submit_button("Add Setting"):
             if not add_name or not add_value:
-                st.error("Both fields are required.")
+                st.session_state.notification = ("error", "Both fields are required.")
             elif add_name in st.session_state.user_settings:
-                st.error(f"'{add_name}' already exists.")
+                st.session_state.notification = ("error", f"'{add_name}' already exists.")
             else:
                 st.session_state.user_settings[add_name] = add_value
-                st.success("Added!")
-                st.rerun()
+                st.session_state.notification = ("success", "Setting Added!")
+            st.rerun()
 
 with col2:
     st.subheader("Update")
@@ -41,13 +51,13 @@ with col2:
         
         if st.form_submit_button("Update Setting"):
             if not up_name or not up_value:
-                st.error("Both fields are required.")
+                st.session_state.notification = ("error", "Both fields are required.")
             elif up_name not in st.session_state.user_settings:
-                st.error(f"'{up_name}' not found.")
+                st.session_state.notification = ("error", f"'{up_name}' not found.")
             else:
                 st.session_state.user_settings[up_name] = up_value
-                st.success("Updated!")
-                st.rerun()
+                st.session_state.notification = ("success", "Setting Updated!")
+            st.rerun()
 
 with col3:
     st.subheader("Delete")
@@ -56,10 +66,10 @@ with col3:
         
         if st.form_submit_button("Delete Setting"):
             if not del_name:
-                st.error("Field required.")
+                st.session_state.notification = ("error", "Field required.")
             elif del_name not in st.session_state.user_settings:
-                st.error(f"'{del_name}' not found.")
+                st.session_state.notification = ("error", f"'{del_name}' not found.")
             else:
                 del st.session_state.user_settings[del_name]
-                st.success("Deleted!")
-                st.rerun()
+                st.session_state.notification = ("success", "Setting Deleted!")
+            st.rerun()
