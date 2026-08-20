@@ -3,7 +3,7 @@
 A dynamic, session-state-based configuration dashboard built with Python. 
 
 ## Preview
-![Application Preview](./assets/2.png)
+![Application Preview](./assets/1.png)
 
 **🔗 [View Live Application](https://jatinp-settings.streamlit.app/)**
 

@@ -1,12 +1,42 @@
 import streamlit as st
 
-st.set_page_config(page_title="Settings App")
+st.set_page_config(page_title="Settings App", layout="wide")
 
 st.markdown(
     """
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
+    }
+
     [data-testid="InputInstructions"] {
         display: none;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 1.25rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+    }
+
+    th, td {
+        padding: 18px 24px !important;
+        text-align: left !important;
+    }
+
+    th {
+        font-weight: 600 !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.25) !important;
+        background-color: rgba(255, 255, 255, 0.02) !important;
+    }
+
+    td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        font-weight: 500 !important;
     }
     </style>
     """,
@@ -21,7 +51,7 @@ if "notification" not in st.session_state:
 st.title("User Settings Manager")
 
 st.info(
-    "This is a simple settings dashboard. By default, the app starts with a 'theme' and 'volume' setting. You can add, update, or delete your preferences using the forms below. Any changes you make will instantly update the table."
+    "This is a simple settings dashboard. By default, the app starts with a 'theme' and 'volume' setting. You can add, update, or delete your preferences using the options below. Any changes you make will instantly update the table."
 )
 
 if st.session_state.notification:
@@ -32,62 +62,75 @@ if st.session_state.notification:
         st.error(msg_text)
     st.session_state.notification = None
 
-st.subheader("Current Settings")
-if not st.session_state.user_settings:
-    st.warning("No settings available.")
-else:
-    st.table(st.session_state.user_settings)
+left_col, right_col = st.columns([1.2, 1], gap="large")
 
-st.divider()
+with left_col:
+    st.subheader("Current Settings")
+    if not st.session_state.user_settings:
+        st.warning("No settings available.")
+    else:
+        display_dict = {
+            str(k).upper(): str(v).upper()
+            for k, v in st.session_state.user_settings.items()
+        }
+        st.table(display_dict)
 
-col1, col2, col3 = st.columns(3)
+with right_col:
+    st.subheader("Manage Settings")
+    tab1, tab2, tab3 = st.tabs(["Add", "Update", "Delete"])
 
-with col1:
-    st.subheader("Add")
-    with st.form("add_form", clear_on_submit=True):
-        add_name = st.text_input("Setting Name").lower()
-        add_value = st.text_input("Setting Value").lower()
+    with tab1:
+        with st.form("add_form", clear_on_submit=True):
+            add_name = st.text_input("Setting Name").lower()
+            add_value = st.text_input("Setting Value").lower()
 
-        if st.form_submit_button("Add Setting"):
-            if not add_name or not add_value:
-                st.session_state.notification = ("error", "Both fields are required.")
-            elif add_name in st.session_state.user_settings:
-                st.session_state.notification = (
-                    "error",
-                    f"'{add_name}' already exists.",
-                )
-            else:
-                st.session_state.user_settings[add_name] = add_value
-                st.session_state.notification = ("success", "Setting Added!")
-            st.rerun()
+            if st.form_submit_button("Add Setting"):
+                if not add_name or not add_value:
+                    st.session_state.notification = (
+                        "error",
+                        "Both fields are required.",
+                    )
+                elif add_name in st.session_state.user_settings:
+                    st.session_state.notification = (
+                        "error",
+                        f"'{add_name}' already exists.",
+                    )
+                else:
+                    st.session_state.user_settings[add_name] = add_value
+                    st.session_state.notification = ("success", "Setting Added!")
+                st.rerun()
 
-with col2:
-    st.subheader("Update")
-    with st.form("update_form", clear_on_submit=True):
-        up_name = st.text_input("Existing Setting Name").lower()
-        up_value = st.text_input("New Value").lower()
+    with tab2:
+        with st.form("update_form", clear_on_submit=True):
+            up_name = st.text_input("Existing Setting Name").lower()
+            up_value = st.text_input("New Value").lower()
 
-        if st.form_submit_button("Update Setting"):
-            if not up_name or not up_value:
-                st.session_state.notification = ("error", "Both fields are required.")
-            elif up_name not in st.session_state.user_settings:
-                st.session_state.notification = ("error", f"'{up_name}' not found.")
-            else:
-                st.session_state.user_settings[up_name] = up_value
-                st.session_state.notification = ("success", "Setting Updated!")
-            st.rerun()
+            if st.form_submit_button("Update Setting"):
+                if not up_name or not up_value:
+                    st.session_state.notification = (
+                        "error",
+                        "Both fields are required.",
+                    )
+                elif up_name not in st.session_state.user_settings:
+                    st.session_state.notification = ("error", f"'{up_name}' not found.")
+                else:
+                    st.session_state.user_settings[up_name] = up_value
+                    st.session_state.notification = ("success", "Setting Updated!")
+                st.rerun()
 
-with col3:
-    st.subheader("Delete")
-    with st.form("delete_form", clear_on_submit=True):
-        del_name = st.text_input("Setting Name to Delete").lower()
+    with tab3:
+        with st.form("delete_form", clear_on_submit=True):
+            del_name = st.text_input("Setting Name to Delete").lower()
 
-        if st.form_submit_button("Delete Setting"):
-            if not del_name:
-                st.session_state.notification = ("error", "Field required.")
-            elif del_name not in st.session_state.user_settings:
-                st.session_state.notification = ("error", f"'{del_name}' not found.")
-            else:
-                del st.session_state.user_settings[del_name]
-                st.session_state.notification = ("success", "Setting Deleted!")
-            st.rerun()
+            if st.form_submit_button("Delete Setting"):
+                if not del_name:
+                    st.session_state.notification = ("error", "Field required.")
+                elif del_name not in st.session_state.user_settings:
+                    st.session_state.notification = (
+                        "error",
+                        f"'{del_name}' not found.",
+                    )
+                else:
+                    del st.session_state.user_settings[del_name]
+                    st.session_state.notification = ("success", "Setting Deleted!")
+                st.rerun()
