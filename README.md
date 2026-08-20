@@ -1,10 +1,9 @@
 # User Settings Manager
 
-<p align="center">
-  <img src="./assets/1.png" width="45%" />
-  <img src="./assets/2.png" width="45%" />
-</p>
 A dynamic, session-state-based configuration dashboard built with Python. 
+
+## Preview
+![Application Preview](./assets/2.png)
 
 **🔗 [View Live Application](https://jatinp-settings.streamlit.app/)**
 
@@ -19,3 +18,8 @@ This application provides a centralized interface for managing user preferences.
 ## Technical Stack
 * **Language:** Python
 * **Framework:** Streamlit
+
+## Deployment
+This application is deployed via Streamlit Community Cloud.
+
+**Live Application:** https://jatinp-settings.streamlit.app/
