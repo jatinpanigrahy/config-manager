@@ -6,7 +6,7 @@
 </p>
 A dynamic, session-state-based configuration dashboard built with Python. 
 
-**🔗 [View Live Application](https://config-manager.streamlit.app/)**
+**🔗 [View Live Application](https://jatinp-settings.streamlit.app/)**
 
 ## Overview
 This application provides a centralized interface for managing user preferences. It uses Streamlit's session state functionality to process data operations (Create, Read, Update, Delete) in real-time without requiring backend database integration.
