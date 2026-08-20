@@ -1,8 +1,8 @@
 # User Settings Manager
 
 <p align="center">
-  <img src="./assets/interface-ss-1.png" width="45%" />
-  <img src="./assets/interface-ss-2.png" width="45%" />
+  <img src="./assets/1.png" width="45%" />
+  <img src="./assets/2.png" width="45%" />
 </p>
 A dynamic, session-state-based configuration dashboard built with Python. 
 
