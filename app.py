@@ -1,6 +1,8 @@
 import streamlit as st
 
-st.set_page_config(page_title="Settings App", layout="wide")
+st.set_page_config(
+    page_title="Settings App", page_icon="assets/favicon.svg", layout="wide"
+)
 
 st.markdown(
     """
